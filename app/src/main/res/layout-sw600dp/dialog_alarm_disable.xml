@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018 ThanksMister LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed
+  ~ under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<com.thanksmister.iot.mqtt.alarmpanel.ui.views.AlarmDisableView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alarmDisableView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <include
+        layout="@layout/view_keypad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_weight="0"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <com.todddavies.components.progressbar.ProgressWheel
+            android:id="@+id/countDownProgressWheel"
+            android:layout_width="420dp"
+            android:layout_height="420dp"
+            ProgressWheel:barColor="@color/green"
+            ProgressWheel:barWidth="16dp"
+            ProgressWheel:contourColor="@color/gray_color"
+            ProgressWheel:rimColor="@color/gray_color"
+            ProgressWheel:rimWidth="16dp"
+            ProgressWheel:textColor="@color/text"
+            ProgressWheel:textSize="32sp"
+            tools:text="60"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="36dp"
+            android:layout_toEndOf="@+id/countDownProgressWheel"
+            android:layout_toRightOf="@+id/countDownProgressWheel"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/disable_fingerprint_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/ic_fingerprint"
+                android:drawableStart="@drawable/ic_fingerprint"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/text_touch_sensor"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/imageLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="6dp">
+
+                <ImageView
+                    android:id="@+id/pinCode1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_radio_button_unchecked_black"
+                    android:tint="@color/dark_gray" />
+
+                <View
+                    android:layout_width="6dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/pinCode2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_radio_button_unchecked_black"
+                    android:tint="@color/dark_gray" />
+
+                <View
+                    android:layout_width="6dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/pinCode3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_radio_button_unchecked_black"
+                    android:tint="@color/dark_gray" />
+
+                <View
+                    android:layout_width="6dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/pinCode4"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_radio_button_unchecked_black"
+                    android:tint="@color/dark_gray" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</com.thanksmister.iot.mqtt.alarmpanel.ui.views.AlarmDisableView>

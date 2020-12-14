@@ -1,0 +1,266 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+
+def versionMajor = 0
+def versionMinor = 8
+def versionPatch = 9
+def versionBuild = 4 // bump for dog food builds, public betas, etc.
+
+def ALARM_CODE() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("alarmCode");
+}
+
+def TELEGRAM_TOKEN() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("telegramToken");
+}
+
+def TELEGRAM_CHAT_ID() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("telegramChatId");
+}
+
+def MAIL_GUN_KEY() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mailGunApiKey");
+}
+
+def MAIL_GUN_URL() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mailGunUr");
+}
+
+def IMGUR_CLIENT_ID() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("clientId");
+}
+
+def LATITUDE() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("lat");
+}
+
+def LONGITUDE() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("lon");
+}
+
+def MAIL_FROM() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mailFrom");
+}
+
+def MAIL_TO() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mailTo");
+}
+
+def HASS_URL() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("hassUrl");
+}
+
+def BROKER() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("broker");
+}
+
+def IMGUR_TAG() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("tag");
+}
+
+android {
+    kapt {
+        generateStubs = true
+        correctErrorTypes = true
+    }
+    compileSdkVersion 29
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.thanksmister.iot.mqtt.alarmpanel"
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.target_sdk
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        def BASE_ENVIRONMENT = "BASE_ENVIRONMENT"
+        dev {
+            dimension "default"
+            buildConfigField "String", BASE_ENVIRONMENT, '"DEV_ENVIRONMENT"'
+            applicationId "com.thanksmister.iot.mqtt.alarmpanel"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch} Build ${versionBuild}-DEV"
+            buildConfigField 'Integer', 'ALARM_CODE', ALARM_CODE()
+            buildConfigField 'String', 'MAIL_GUN_KEY', "\"" + MAIL_GUN_KEY() +"\""
+            buildConfigField 'String', 'MAIL_GUN_URL', "\"" + MAIL_GUN_URL() +"\""
+            buildConfigField 'String', 'IMGUR_CLIENT_ID', "\"" + IMGUR_CLIENT_ID() +"\""
+            buildConfigField 'String', 'LATITUDE', "\"" + LATITUDE() +"\""
+            buildConfigField 'String', 'LONGITUDE', "\"" + LONGITUDE() +"\""
+            buildConfigField 'String', 'MAIL_FROM', "\"" + MAIL_FROM() +"\""
+            buildConfigField 'String', 'MAIL_TO', "\"" + MAIL_TO() +"\""
+            buildConfigField 'String', 'HASS_URL', "\"" + HASS_URL() +"\""
+            buildConfigField 'String', 'BROKER', "\"" + BROKER() +"\""
+            buildConfigField 'String', 'IMGUR_TAG', "\"" + IMGUR_TAG() +"\""
+            buildConfigField 'String', 'TELEGRAM_TOKEN', "\"" + TELEGRAM_TOKEN() +"\""
+            buildConfigField 'String', 'TELEGRAM_CHAT_ID', "\"" + TELEGRAM_CHAT_ID() +"\""
+        }
+        qa {
+            dimension "default"
+            buildConfigField "String", BASE_ENVIRONMENT, '"QA_ENVIRONMENT"'
+            applicationId "com.thanksmister.iot.mqtt.alarmpanel"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch} Build ${versionBuild}-QA"
+        }
+        prod {
+            dimension "default"
+            buildConfigField "String", BASE_ENVIRONMENT, '"PROD_ENVIRONMENT"'
+            applicationId "com.thanksmister.iot.mqtt.alarmpanel"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch} Build ${versionBuild}"
+            buildConfigField 'Integer', 'ALARM_CODE', '1234'
+            buildConfigField 'String', 'MAIL_GUN_KEY', '""'
+            buildConfigField 'String', 'MAIL_GUN_URL','""'
+            buildConfigField 'String', 'IMGUR_CLIENT_ID', '""'
+            buildConfigField 'String', 'LATITUDE', '""'
+            buildConfigField 'String', 'LONGITUDE', '""'
+            buildConfigField 'String', 'MAIL_FROM', '""'
+            buildConfigField 'String', 'MAIL_TO', '""'
+            buildConfigField 'String', 'HASS_URL', '""'
+            buildConfigField 'String', 'BROKER', '""'
+            buildConfigField 'String', 'IMGUR_TAG', '""'
+            buildConfigField 'String', 'TELEGRAM_TOKEN', '""'
+            buildConfigField 'String', 'TELEGRAM_CHAT_ID', '""'
+        }
+    }
+}
+
+/*configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}*/
+/*
+
+configurations.all {
+    resolutionStrategy {
+        force "com.android.support:appcompat-v7:$versions.support"
+    }
+}
+*/
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'com.google.android.gms:play-services-vision:20.1.2'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Navigation
+    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
+    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
+
+    // RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // LiveData + ViewModel
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$versions.lifecycle"
+
+    // Room
+    implementation 'androidx.room:room-runtime:2.2.1'
+    kapt 'androidx.room:room-compiler:2.2.1'
+    implementation 'androidx.room:room-rxjava2:2.2.1'
+
+    // MQTT
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1', {
+        exclude module: 'support-v4'
+    }
+
+    // Image
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+
+    // OKHttp
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.google.dagger:dagger-android:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$versions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+
+    // Stetho
+    implementation "com.facebook.stetho:stetho:$versions.stetho"
+    implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
+    implementation "com.facebook.stetho:stetho-urlconnection:$versions.stetho"
+
+    // Fingerprint Identify
+    implementation 'com.wei.android.lib:fingerprintidentify:1.2.6'
+
+    // 3rd party
+    implementation 'com.koushikdutta.async:androidasync:2.1.9'
+
+    implementation 'joda-time:joda-time:2.9.9'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+
+    // Add the Firebase Crashlytics SDK.
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+
+    // Recommended: Add the Google Analytics SDK.
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+}
